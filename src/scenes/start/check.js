@@ -1,6 +1,7 @@
 const { Scenes } = require("telegraf");
 const db = require("../../database");
 
+
 const scene = new Scenes.BaseScene("check");
 
 scene.enter(async (ctx) => {
