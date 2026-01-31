@@ -1,0 +1,10 @@
+const { Scenes } = require("telegraf");
+
+const stage = new Scenes.Stage([
+  ...require("./start"),
+  ...require("./auth"),
+  ...require("./settings"),
+]);
+
+module.exports = stage;
+    
