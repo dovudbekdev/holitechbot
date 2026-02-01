@@ -6,6 +6,7 @@
     "license": "MIT",
     "scripts": {
         "dev": "cross-env NODE_ENV=development nodemon index.js",
+        "start": "cross-env NODE_ENV=development node index.js",
         "prod": "cross-env NODE_ENV=production pm2 start index.js --name ASSOSCLUB",
         "push": "cross-env npm run push:commit --",
         "push:commit": "cross-env git add . && git commit -m \"$npm_config_message\" && git push origin main"
