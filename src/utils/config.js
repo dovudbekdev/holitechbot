@@ -1,9 +1,11 @@
 const path = require("path");
 const logger = require("./logger");
 
-require("dotenv").config({
-  path: path.resolve(__dirname, `../../.env.${process.env.NODE_ENV}`),
-});
+require("dotenv").config(
+  // {
+  // path: path.resolve(__dirname, `../../.env.${process.env.NODE_ENV}`),
+// }
+);
 
 const config = {
   NODE_ENV: process.env.NODE_ENV || "development",
