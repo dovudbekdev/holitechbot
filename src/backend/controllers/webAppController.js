@@ -263,7 +263,7 @@ module.exports = class webApp {
       }
 
       const priceOption = project.prices.find(
-        (price) => price.duration === duration
+        (price) => price.duration === duration,
       );
 
       if (!priceOption) {
@@ -276,7 +276,7 @@ module.exports = class webApp {
       const subscription =
         await db.controllers.subscriptions.getSubscriptionByUserIdAndProjectId(
           userId,
-          projectId
+          projectId,
         );
       console.log("subscription bormi:", subscription, userId);
 
@@ -306,7 +306,7 @@ module.exports = class webApp {
                 Authorization: `Basic ${config.BACKEND_TOKEN}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
 
           // console.log("resPay status", resPay);
@@ -336,7 +336,7 @@ module.exports = class webApp {
             chat_id: Number(project.channelId),
             name: "1-martalik link",
             member_limit: 1, // Faqat bir kishi uchun
-          }
+          },
         );
         try {
           await axios.post(
@@ -348,7 +348,7 @@ module.exports = class webApp {
 Link faqat 1 marta ishlaydi!
 
 👉 [Qo'shilish Linki](${response.data.result.invite_link})`,
-            }
+            },
           );
         } catch (error) {
           console.log("dont send message");
@@ -429,7 +429,7 @@ Link faqat 1 marta ishlaydi!
 
       expiryDate = expiryDate.replace(/\D/g, "");
 
-      console.log(cardName, cardNumber, expiryDate, userId);
+      console.log("bu meni loglarim", cardName, cardNumber, expiryDate, userId);
 
       // Payment
       try {
@@ -445,9 +445,9 @@ Link faqat 1 marta ishlaydi!
               Authorization: `Basic ${config.BACKEND_TOKEN}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
-        // console.log("resAddCard", resAddCard.data);
+        console.log("Yaratilayotgan card =>", resAddCard.data);
 
         await db.controllers.users.updateUser(userId, {
           paymentUserId: resAddCard.data.user_id,
@@ -488,7 +488,7 @@ Link faqat 1 marta ishlaydi!
   static async smsCheck(req, res) {
     try {
       const { smsCode, userId } = await smsAndUserIdValidate.validateAsync(
-        req.body
+        req.body,
       );
 
       const user = await db.controllers.users.getByUserId(userId);
@@ -514,9 +514,9 @@ Link faqat 1 marta ishlaydi!
               Authorization: `Basic ${config.BACKEND_TOKEN}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
-        // console.log("resVerify", resVerify);
+        console.log("resVerify", resVerify);
       } catch (e) {
         logger.error("smsCheck 1: " + e);
         return res.status(403).json({
