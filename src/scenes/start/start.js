@@ -135,7 +135,7 @@ Keyingi oydan 47 000 so'mdan yechadi har oyda 1 marta, agar xohlamasangiz bot or
 
     // Loglar faqat foydalanuvchi "✅ Roziman" bosganda chiqadi
     logger.info(
-      `Roziman: projectId=${project?.projectId} defaultDuration=${defaultDuration} userId=${userId} config.URL=${config.URL}`
+      `Roziman: projectId=${project?.projectId} defaultDuration=${defaultDuration} userId=${userId} config.URL=${config.URL}`,
     );
 
     let url = `${config.URL}?project_id=${project.projectId}&user_id=${userId}&duration=${defaultDuration}`;
@@ -169,6 +169,7 @@ scene.hears("📩 Bog'lanish", async (ctx) => {
 
 scene.hears("⚙️ Sozlamalar", async (ctx) => {
   try {
+    console.log("Sozlamalarga kirdi");
     const userId = ctx.from.id;
 
     let user = await db.controllers.users.getByUserId(userId);
@@ -176,7 +177,7 @@ scene.hears("⚙️ Sozlamalar", async (ctx) => {
     const subscriptionId =
       await db.controllers.subscriptions.getSubscriptionByUserIdAndProjectId(
         userId,
-        project.projectId
+        project.projectId,
       );
 
     let txt = `⚙️ Sozlamalar:
@@ -186,24 +187,25 @@ scene.hears("⚙️ Sozlamalar", async (ctx) => {
 ☎️ Telefon: ***${user.phoneNumber.slice(-4)}
 
 💳 Karta: ${user.verifyCard ? "Tasdiqlangan ✅" : "Tasdiqlanmagan ❌"}
-ℹ️ Obuna: ${subscriptionId && subscriptionId.active ? "Mavjud ✅" : "Mavjud emas ❌"
-      }
+ℹ️ Obuna: ${
+      subscriptionId && subscriptionId.active ? "Mavjud ✅" : "Mavjud emas ❌"
+    }
 
 `;
 
-    // let keyboard;
+    // // let keyboard;
 
-    if (subscriptionId && subscriptionId.active) {
-      // Agar karta tasdiqlangan bo'lsa, o'chirish tugmasini ko'rsatamiz
-      keyboard = Markup.keyboard([["🗑️ Obunani o'chirish"], ["🔙 Orqaga"]])
-        .resize()
-        .oneTime();
-    } else {
-      // Agar karta tasdiqlanmagan bo'lsa, qo'shish tugmasini ko'rsatamiz
-      keyboard = Markup.keyboard([["🔙 Orqaga"]])
-        .resize()
-        .oneTime();
-    }
+    // if (subscriptionId && subscriptionId.active) {
+    //   // Agar karta tasdiqlangan bo'lsa, o'chirish tugmasini ko'rsatamiz
+    //   keyboard = Markup.keyboard([["🗑️ Obunani o'chirish"], ["🔙 Orqaga"]])
+    //     .resize()
+    //     .oneTime();
+    // } else {
+    //   // Agar karta tasdiqlanmagan bo'lsa, qo'shish tugmasini ko'rsatamiz
+    //   keyboard = Markup.keyboard([["🔙 Orqaga"]])
+    //     .resize()
+    //     .oneTime();
+    // }
 
     // Keyboard yaratish
     let keyboardButtons = [];
@@ -239,7 +241,7 @@ scene.hears("🗑️ Obunani o'chirish", async (ctx) => {
     const subscriptionId =
       await db.controllers.subscriptions.getSubscriptionByUserIdAndProjectId(
         userId,
-        project.projectId
+        project.projectId,
       );
 
     const updatedSubscription =
@@ -249,13 +251,13 @@ scene.hears("🗑️ Obunani o'chirish", async (ctx) => {
       await ctx.answerCbQuery("Obuna to'xtatilmadi");
       return;
     }
-    await ctx.telegram.kickChatMember(project.channelId, userId)
+    await ctx.telegram.kickChatMember(project.channelId, userId);
     await ctx.telegram.unbanChatMember(project.channelId, userId);
     const keyboard = Markup.keyboard([["🔙 Orqaga"]]).resize();
     await ctx.reply("Obuna muvaffaqiyatli to'xtatildi.", keyboard);
   } catch (e) {
     await ctx.reply(
-      "Karta o'chirish jarayonida xato yuz berdi. Iltimos, qaytadan urinib ko'ring."
+      "Karta o'chirish jarayonida xato yuz berdi. Iltimos, qaytadan urinib ko'ring.",
     );
   }
 });
@@ -270,7 +272,7 @@ scene.hears("🗑️ Kartani o'chirish", async (ctx) => {
     await ctx.reply("Sizning kartangiz muvaffaqiyatli o'chirildi.", keyboard);
   } catch (e) {
     await ctx.reply(
-      "Karta o'chirish jarayonida xato yuz berdi. Iltimos, qaytadan urinib ko'ring."
+      "Karta o'chirish jarayonida xato yuz berdi. Iltimos, qaytadan urinib ko'ring.",
     );
   }
 });
@@ -287,7 +289,7 @@ scene.hears("🗑️ O'chirish", async (ctx) => {
       [
         Markup.button.webApp(
           "💳 Karta qo'shish",
-          `${config.URL}/card-add.html?user_id=${userId}`
+          `${config.URL}/card-add.html?user_id=${userId}`,
         ),
       ],
       ["💬 Ismni yanglash", "💬 Familiyani yangilash"],
@@ -297,7 +299,7 @@ scene.hears("🗑️ O'chirish", async (ctx) => {
     await ctx.reply("Sizning kartangiz muvaffaqiyatli o'chirildi.", keyboard);
   } catch (e) {
     await ctx.reply(
-      "Karta o'chirish jarayonida xato yuz berdi. Iltimos, qaytadan urinib ko'ring."
+      "Karta o'chirish jarayonida xato yuz berdi. Iltimos, qaytadan urinib ko'ring.",
     );
   }
 });
