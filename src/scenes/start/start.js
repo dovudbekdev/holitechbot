@@ -230,37 +230,6 @@ scene.hears("⚙️ Sozlamalar", async (ctx) => {
 });
 
 scene.hears("🗑️ Obunani o'chirish", async (ctx) => {
-  // try {
-  //   const userId = ctx.from.id;
-  //   // kartani o'chirish
-  //   // await db.controllers.users.deleteCard(userId);
-  //   const project = await db.controllers.projects.getProject();
-  //   if (!project || !project.projectId) {
-  //     return ctx.scene.enter("start");
-  //   }
-  //   const subscriptionId =
-  //     await db.controllers.subscriptions.getSubscriptionByUserIdAndProjectId(
-  //       userId,
-  //       project.projectId,
-  //     );
-
-  //   const updatedSubscription =
-  //     await db.controllers.subscriptions.cancelSubscription(subscriptionId);
-
-  //   if (!updatedSubscription) {
-  //     await ctx.answerCbQuery("Obuna to'xtatilmadi");
-  //     return;
-  //   }
-  //   await ctx.telegram.kickChatMember(project.channelId, userId);
-  //   await ctx.telegram.unbanChatMember(project.channelId, userId);
-  //   const keyboard = Markup.keyboard([["🔙 Orqaga"]]).resize();
-  //   await ctx.reply("Obuna muvaffaqiyatli to'xtatildi.", keyboard);
-  // } catch (e) {
-  //   await ctx.reply(
-  //     "Karta o'chirish jarayonida xato yuz berdi. Iltimos, qaytadan urinib ko'ring.",
-  //   );
-  // }
-
   try {
     const userId = ctx.from.id;
 
