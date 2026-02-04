@@ -230,35 +230,69 @@ scene.hears("⚙️ Sozlamalar", async (ctx) => {
 });
 
 scene.hears("🗑️ Obunani o'chirish", async (ctx) => {
+  // try {
+  //   const userId = ctx.from.id;
+  //   // kartani o'chirish
+  //   // await db.controllers.users.deleteCard(userId);
+  //   const project = await db.controllers.projects.getProject();
+  //   if (!project || !project.projectId) {
+  //     return ctx.scene.enter("start");
+  //   }
+  //   const subscriptionId =
+  //     await db.controllers.subscriptions.getSubscriptionByUserIdAndProjectId(
+  //       userId,
+  //       project.projectId,
+  //     );
+
+  //   const updatedSubscription =
+  //     await db.controllers.subscriptions.cancelSubscription(subscriptionId);
+
+  //   if (!updatedSubscription) {
+  //     await ctx.answerCbQuery("Obuna to'xtatilmadi");
+  //     return;
+  //   }
+  //   await ctx.telegram.kickChatMember(project.channelId, userId);
+  //   await ctx.telegram.unbanChatMember(project.channelId, userId);
+  //   const keyboard = Markup.keyboard([["🔙 Orqaga"]]).resize();
+  //   await ctx.reply("Obuna muvaffaqiyatli to'xtatildi.", keyboard);
+  // } catch (e) {
+  //   await ctx.reply(
+  //     "Karta o'chirish jarayonida xato yuz berdi. Iltimos, qaytadan urinib ko'ring.",
+  //   );
+  // }
+
   try {
     const userId = ctx.from.id;
-    // kartani o'chirish
-    await db.controllers.users.deleteCard(userId);
+
     const project = await db.controllers.projects.getProject();
-    if (!project || !project.projectId) {
-      return ctx.scene.enter("start");
-    }
-    const subscriptionId =
+    if (!project?.projectId) return ctx.scene.enter("start");
+
+    const subscription =
       await db.controllers.subscriptions.getSubscriptionByUserIdAndProjectId(
         userId,
         project.projectId,
       );
 
-    const updatedSubscription =
-      await db.controllers.subscriptions.cancelSubscription(subscriptionId);
+    if (!subscription) return ctx.reply("Faol obuna topilmadi.");
 
-    if (!updatedSubscription) {
-      await ctx.answerCbQuery("Obuna to'xtatilmadi");
-      return;
+    const updated =
+      await db.controllers.subscriptions.cancelSubscription(subscription);
+
+    if (!updated) return ctx.reply("Obuna to'xtatilmadi.");
+
+    try {
+      await ctx.telegram.banChatMember(project.channelId, userId);
+      await ctx.telegram.unbanChatMember(project.channelId, userId);
+    } catch (error) {
+      console.log("Foydalanuvchilarni kanaldan chiqarib yuborishda xatolik");
     }
-    await ctx.telegram.kickChatMember(project.channelId, userId);
-    await ctx.telegram.unbanChatMember(project.channelId, userId);
+
     const keyboard = Markup.keyboard([["🔙 Orqaga"]]).resize();
-    await ctx.reply("Obuna muvaffaqiyatli to'xtatildi.", keyboard);
+
+    await ctx.reply("✅ Obuna muvaffaqiyatli to'xtatildi.", keyboard);
   } catch (e) {
-    await ctx.reply(
-      "Karta o'chirish jarayonida xato yuz berdi. Iltimos, qaytadan urinib ko'ring.",
-    );
+    console.log(e);
+    await ctx.reply("Xatolik yuz berdi.");
   }
 });
 
